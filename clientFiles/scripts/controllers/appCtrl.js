@@ -5,19 +5,26 @@ teacherApp.controller('appController', function ($scope) {
 
 teacherApp.controller('loginController', function ($scope, $state, $http) {
     $scope.userName = '';
+    $scope.teacherName = ''
 
     $scope.loginTeacher = function () {
-        $state.go('teacherHome');
+        
         console.log($scope.userName);
 
         $http({
-            method: "GET",
-            url: "http://127.0.0.1:8081/addTeacher"
+            method: "POST",
+            url: "http://127.0.0.1:8081/loginTeacher",
+            data: {
+                userName: $scope.userName,
+                password: $scope.password
+            }
         }).then(function mySuccess(response) {
-            $scope.myWelcome = response.data;
-            console.log(res);
+            if (response.statusText === 'OK') {
+                $scope.teacherName = response.data.name;
+                $state.go('teacherHome');
+            }
         }, function myError(response) {
-            $scope.myWelcome = response.statusText;
+            console.log(response);
         });
     };
 
@@ -25,19 +32,22 @@ teacherApp.controller('loginController', function ($scope, $state, $http) {
         $http({
             method: "POST",
             url: "http://127.0.0.1:8081/addTeacher",
-            headers : {
-                'Access-Control-Allow-Origin': "http://127.0.0.1"
-              },
             data: {
                 name: $scope.name,
-                address: $scope.subject,
+                subject: $scope.subject,
                 userName: $scope.userName,
                 password: $scope.password
             }
         }).then(function mySuccess(response) {
-            console.log(res);
+            if (response.statusText === 'OK') {
+                $state.go('login');
+            }
         }, function myError(response) {
-            $scope.myWelcome = response.statusText;
+            console.log(response);
         });
     };
+});
+
+teacherApp.controller('teacherDashBoardController', function ($scope) {
+
 });
