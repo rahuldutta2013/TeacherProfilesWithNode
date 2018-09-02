@@ -21,10 +21,10 @@ teacherApp.config(function ($stateProvider, $urlRouterProvider) {
         })
 
         .state('teacherHome', {
-            url: '/teacherHome',
+            url: '/teacherHome?:userId',
             templateUrl: './clientFiles/templates/teacherHome.html',
             params: {
-                'teacherInfo': {}
+                'userId': ''
             }
         })
 });

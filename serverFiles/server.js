@@ -6,7 +6,7 @@ bodyParser = require('body-parser'),
   url = "mongodb://localhost:27017/",
   cors = require('cors');
 
-  var ObjectId = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
 
 
 app.use(bodyParser.json());
@@ -90,6 +90,31 @@ app.post('/addTeacher', function (req, res) {
   });
 });
 
+app.post('/editTeacher', function (req, res) {
+  if (sess && sess.uniquId) {
+    MongoClient.connect(url, function (err, db) {
+
+      if (err) throw err;
+
+      var dbo = db.db("Teacherdb");
+      var myquery = { _id: ObjectId(req.body._id) },
+        newInfo = req.body;
+
+      delete newInfo['_id'];
+
+      dbo.collection("teacherprofile").updateOne(myquery, { $set: newInfo }, function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).send('Successfully updated user');
+        }
+      });
+    });
+  } else {
+    res.status(400).json('Login required');
+  }
+});
+
 app.get('/dashboard', function (req, res) {
   if (sess && sess.uniquId) {
     MongoClient.connect(url, function (err, db) {
@@ -97,24 +122,22 @@ app.get('/dashboard', function (req, res) {
       if (err) throw err;
 
       var dbo = db.db("Teacherdb"),
-        query = { _id: JSON.parse(req.query.userName)._id};
+        query = { "_id": ObjectId(req.query.userId) };
 
-//         var o_id = new ObjectId(id);
-// > db.test.find({_id:o_id})
-      dbo.collection("teacherprofile").find({"_id":ObjectId(JSON.parse(req.query.userName)._id)}, function (err, user) {
+      dbo.collection("teacherprofile").findOne(query, function (err, user) {
         if (err) throw err;
 
         if (!user) {
-          res.end('user not found', res);
+          res.status(304).send('user not found');
         } else {
-          res.json(user);
+          res.status(200).send(user);
         }
 
         db.close();
       });
     });
   } else {
-    res.end('Login required');
+    res.status(400).json('Login required');
   }
 });
 

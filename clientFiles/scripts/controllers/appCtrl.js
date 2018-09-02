@@ -4,7 +4,7 @@ teacherApp.controller('appController', function ($scope) {
 });
 
 teacherApp.controller('loginController', function ($scope, $state, $http, $rootScope) {
-    $scope.userName = '';
+    $scope.userName = $scope.password = 'rahuldutta';
 
     $scope.loginTeacher = function () {
         $http({
@@ -16,7 +16,7 @@ teacherApp.controller('loginController', function ($scope, $state, $http, $rootS
             }
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {
-                $state.go('teacherHome', { teacherInfo : response.data})
+                $state.go('teacherHome', { userId : response.data._id})
             }
         }, function myError(response) {
             console.log(response);
@@ -43,23 +43,24 @@ teacherApp.controller('loginController', function ($scope, $state, $http, $rootS
     };
 });
 
-teacherApp.controller('teacherDashBoardController', function ($scope, $stateParams, $http) {
-    var userName = $stateParams.teacherInfo;
+teacherApp.controller('teacherDashBoardController', function ($scope, $stateParams, $http, $state) {
+    var userId = $stateParams.userId;
     
-
     $scope.getTeacherInfo = function() {
         $http({
             method: "GET",
             url: "http://127.0.0.1:8081/dashboard",
             params: {
-                userName: userName
+                userId: userId
             }
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {
                 $scope.teacherInfo = response.data;
             }
         }, function myError(response) {
-            console.log(response);
+            if (response.data === 'Login required') {
+                $state.go('login');
+            }
         });
     };
 
@@ -72,6 +73,21 @@ teacherApp.controller('teacherDashBoardController', function ($scope, $statePara
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {
                 $state.go('login');
+            }
+        }, function myError(response) {
+            console.log(response);
+        });
+    };
+
+    $scope.EditProfile = function () {
+        console.log($scope.myForm);
+        $http({
+            method: "POST",
+            url: "http://127.0.0.1:8081/editTeacher",
+            data: $scope.teacherInfo
+        }).then(function mySuccess(response) {
+            if (response.statusText === 'OK') {
+                angular.element('#edit_modal').modal('hide');
             }
         }, function myError(response) {
             console.log(response);
