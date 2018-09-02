@@ -1,5 +1,11 @@
-<div ng-controller="loginController">
-    welcome {{teacherName}}
+<div ng-controller="teacherDashBoardController">
+    welcome {{teacherInfo.teacherName}}
 
-    kk{{aaa}}
+    <button ng-click="getTeacherInfo()">
+        dashboad
+    </button>
+
+    <button ng-click="logout()">
+        Logout
+    </button>
 </div>
