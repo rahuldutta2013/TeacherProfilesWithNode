@@ -1,20 +1,46 @@
 <section ng-controller="loginController">
-    <h2>Register Here</h2>
-    <div>
-        Name:
-        <input type="text" ng-model="name">
-    </div>
-    <div>
-        Subject:
-        <input type="text" ng-model="subject">
-    </div>
-    <div>
-        UserName:
-        <input type="text" ng-model="userName">
-    </div>
-    <div>
-        Password:
-        <input type="text" ng-model="password">
-    </div>
-    <button ng-click="registerTeacher()">Submit</button>
+    <form name="myForm" novalidate>
+        <h2>Register Here</h2>
+        <p>Name:<br>
+            <input type="text" name="name" ng-model="teacherInfo.name" required>
+            <span style="color:red" ng-show="myForm.name.$dirty && myForm.name.$invalid">
+                <span ng-show="myForm.name.$error.required">Name is required.</span>
+            </span>
+        </p>
+
+        <p>Email:<br>
+            <input type="email" name="email" ng-model="teacherInfo.email" required>
+            <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+                <span ng-show="myForm.email.$error.required">Email is required.</span>
+                <span ng-show="myForm.email.$error.email">Invalid email address.</span>
+            </span>
+            <span style="color:red" ng-show="emailAlreadyExist">
+                <span>Email id already exists</span>
+            </span>
+        </p>
+
+        <p>Username:<br>
+            <input type="text" name="userName" ng-model="teacherInfo.userName" required>
+            <span style="color:red" ng-show="myForm.userName.$dirty && myForm.userName.$invalid">
+                <span ng-show="myForm.userName.$error.required">Username is required.</span>
+            </span>
+            <span style="color:red" ng-show="userNameAlreadyExist">
+                <span>Username already exists</span>
+            </span>
+        </p>
+
+        <p>Subject:<br>
+            <input type="text" name="subject" ng-model="teacherInfo.subject" required>
+            <span style="color:red" ng-show="myForm.subject.$dirty && myForm.subject.$invalid">
+                <span ng-show="myForm.subject.$error.required">Subject is required.</span>
+            </span>
+        </p>
+
+        <p>
+            <button type="button" class="btn btn-success" ng-click="registerTeacher()" ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||  
+                myForm.email.$dirty && myForm.email.$invalid">Submit</button>
+            <a ui-sref="login">Login</a>
+        </p>
+
+    </form>
 </section>

@@ -15,6 +15,14 @@ teacherApp.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: './clientFiles/templates/loginPage.html'
         })
 
+        .state('twoStepPage', {
+            url: '/twoStepPage/:regId',
+            templateUrl: './clientFiles/templates/twoStep.html',
+            params: {
+                'regId': ''
+            }
+        })
+
         .state('registerTeacher', {
             url: '/registerTeacher',
             templateUrl: './clientFiles/templates/registerTeacherForm.html'
