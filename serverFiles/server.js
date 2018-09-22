@@ -36,7 +36,7 @@ app.post('/loginTeacher', function (req, res) {
 
     if (err) throw err;
 
-    var dbo = db.db("Teacherdb"),
+    var dbo = db.db("local"),
       query = { userName: req.body.userName };
 
     dbo.collection("teacherprofile").findOne(query, function (err, user) {
@@ -50,6 +50,7 @@ app.post('/loginTeacher', function (req, res) {
         req.session.user = user;
         sess = req.session.user;
         sess.uniquId = req.session.user.userName;
+        res.status(200);
         res.json(user);
       }
 
@@ -60,7 +61,7 @@ app.post('/loginTeacher', function (req, res) {
 
 app.get('/logout', function (req, res) {
   sess = {};
-  res.end('logged out');
+  res.status(200).send({httpStatus: 'OK'});
 });
 
 app.post('/addTeacher', function (req, res) {
@@ -68,7 +69,7 @@ app.post('/addTeacher', function (req, res) {
 
     if (err) throw err;
 
-    var dbo = db.db("Teacherdb");
+    var dbo = db.db("local");
 
     dbo.collection("teacherprofile").find({ 'email': req.body.email }).count(function (err, count) {
       console.log(count);
@@ -117,7 +118,7 @@ app.post('/verifyCode', function (req, res) {
 
     if (err) throw err;
 
-    var dbo = db.db("Teacherdb");
+    var dbo = db.db("local");
     var myquery = { _id: ObjectId(req.body._id) };
 
     dbo.collection("teacherprofile").findOne(myquery, function (err, result) {
@@ -157,11 +158,11 @@ app.post('/editTeacher', function (req, res) {
 
       if (err) throw err;
 
-      var dbo = db.db("Teacherdb");
+      var dbo = db.db("local");
       var myquery = { _id: ObjectId(req.body._id) },
         newInfo = req.body;
 
-      delete newInfo['_id'];
+      delete newInfo._id;
 
       dbo.collection("teacherprofile").updateOne(myquery, { $set: newInfo }, function (err, result) {
         if (err) {
@@ -182,8 +183,8 @@ app.get('/dashboard', function (req, res) {
 
       if (err) throw err;
 
-      var dbo = db.db("Teacherdb"),
-        query = { "_id": ObjectId(req.query.userId) };
+      var dbo = db.db("local"),
+        query = { "_id": sess._id };
 
       dbo.collection("teacherprofile").findOne(query, function (err, user) {
         if (err) throw err;
@@ -203,6 +204,6 @@ app.get('/dashboard', function (req, res) {
 });
 
 var server = app.listen(8081, function () {
-  var host = server.address().address
-  var port = server.address().port
-})
+  var host = server.address().address;
+  var port = server.address().port;
+});
