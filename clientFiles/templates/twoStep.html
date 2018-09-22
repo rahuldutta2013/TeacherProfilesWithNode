@@ -2,6 +2,9 @@
     <div>
         Enter Verification Code:
         <input type="text" ng-model="verificationCode">
+        <span style="color:red" ng-show="invalidCode">
+            <span>Verification code is invalid</span>
+        </span>
     </div>
     <button type="button" class="btn btn-warning" ng-click="verifyCode()">Verify</button>
     <a ui-sref="registerTeacher">Register New</a>
