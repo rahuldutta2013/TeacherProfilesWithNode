@@ -8,7 +8,8 @@ var express = require('express'),
   nodemailer = require('nodemailer'),
   senderEmailAddress = 'rahul.dutta@learningmate.com',
   senderEmailPassword = 'probabilityrd1993',
-  ObjectId = require('mongodb').ObjectID;
+  ObjectId = require('mongodb').ObjectID,
+  dbName = 'Teacherdb'; /*'local'*/ 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,7 +37,7 @@ app.post('/loginTeacher', function (req, res) {
 
     if (err) throw err;
 
-    var dbo = db.db("local"),
+    var dbo = db.db(dbName),
       query = { userName: req.body.userName };
 
     dbo.collection("teacherprofile").findOne(query, function (err, user) {
@@ -69,7 +70,7 @@ app.post('/addTeacher', function (req, res) {
 
     if (err) throw err;
 
-    var dbo = db.db("local");
+    var dbo = db.db(dbName);
 
     dbo.collection("teacherprofile").find({ 'email': req.body.email }).count(function (err, count) {
       console.log(count);
@@ -118,7 +119,7 @@ app.post('/verifyCode', function (req, res) {
 
     if (err) throw err;
 
-    var dbo = db.db("local");
+    var dbo = db.db(dbName);
     var myquery = { _id: ObjectId(req.body._id) };
 
     dbo.collection("teacherprofile").findOne(myquery, function (err, result) {
@@ -158,7 +159,7 @@ app.post('/editTeacher', function (req, res) {
 
       if (err) throw err;
 
-      var dbo = db.db("local");
+      var dbo = db.db(dbName);
       var myquery = { _id: ObjectId(req.body._id) },
         newInfo = req.body;
 
@@ -183,7 +184,7 @@ app.get('/dashboard', function (req, res) {
 
       if (err) throw err;
 
-      var dbo = db.db("local"),
+      var dbo = db.db(dbName),
         query = { "_id": sess._id };
 
       dbo.collection("teacherprofile").findOne(query, function (err, user) {
