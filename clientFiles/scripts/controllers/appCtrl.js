@@ -9,7 +9,7 @@ teacherApp.controller('loginController', function ($scope, $state, $http, $rootS
     $scope.loginTeacher = function () {
         $http({
             method: "POST",
-            url: "http://127.0.0.1:8081/loginTeacher",
+            url: "http://127.0.0.1:8081/externalRoutes/login",
             data: {
                 userName: $scope.userName,
                 password: $scope.password
@@ -50,7 +50,7 @@ teacherApp.controller('teacherDashBoardController', function ($scope, $statePara
     $scope.getTeacherInfo = function () {
         $http({
             method: "GET",
-            url: "http://127.0.0.1:8081/dashboard",
+            url: "http://127.0.0.1:8081/externalRoutes/dashboard",
             params: {
                 userId: userId
             }
