@@ -28,7 +28,7 @@ teacherApp.controller('loginController', function ($scope, $state, $http, $rootS
         $scope.userNameAlreadyExist = false;
         $http({
             method: "POST",
-            url: "http://127.0.0.1:8081/addTeacher",
+            url: "http://127.0.0.1:8081/externalRoutes/addTeacher",
             data: $scope.teacherInfo
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {
@@ -70,7 +70,7 @@ teacherApp.controller('teacherDashBoardController', function ($scope, $statePara
     $scope.logout = function () {
         $http({
             method: "GET",
-            url: "http://127.0.0.1:8081/logout"
+            url: "http://127.0.0.1:8081/externalRoutes/logout"
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {
                 $state.go('login');
@@ -104,7 +104,7 @@ teacherApp.controller('twoStepController', function ($scope, $stateParams, $http
 
         $http({
             method: "POST",
-            url: "http://127.0.0.1:8081/verifyCode",
+            url: "http://127.0.0.1:8081/externalRoutes/verifyCode",
             data: {
                 '_id': regId,
                 'verificationCode': $scope.verificationCode
