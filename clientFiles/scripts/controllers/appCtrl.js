@@ -84,7 +84,7 @@ teacherApp.controller('teacherDashBoardController', function ($scope, $statePara
         console.log($scope.myForm);
         $http({
             method: "POST",
-            url: "http://127.0.0.1:8081/editTeacher",
+            url: "http://127.0.0.1:8081/externalRoutes/editTeacher",
             data: $scope.teacherInfo
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {

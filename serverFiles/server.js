@@ -130,33 +130,6 @@ var transporter = nodemailer.createTransport({
 // });
 
 
-
-// app.post('/editTeacher', function (req, res) {
-//   if (sess && sess.uniquId) {
-//     MongoClient.connect(url, function (err, db) {
-
-//       if (err) throw err;
-
-//       var dbo = db.db(dbName);
-//       var myquery = { _id: ObjectId(req.body._id) },
-//         newInfo = req.body;
-
-//       delete newInfo._id;
-
-//       dbo.collection("teacherprofile").updateOne(myquery, { $set: newInfo }, function (err, result) {
-//         if (err) {
-//           console.log(err);
-//         } else {
-//           res.status(200).send('Successfully updated user');
-//         }
-//       });
-//     });
-//   } else {
-//     res.status(400).json('Login required');
-//   }
-// });
-
-
 var server = app.listen(8081, function () {
   var host = server.address().address;
   var port = server.address().port;

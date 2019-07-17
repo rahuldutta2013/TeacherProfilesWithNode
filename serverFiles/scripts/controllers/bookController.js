@@ -29,14 +29,14 @@ exports.login = function (req, res) {
         if (err) throw err;
 
         var dbo = db.db(dbName),
-            query = { userName: req.body.params.UserName };
+            query = { userName: req.body.userName };
 
         dbo.collection("teacherprofile").findOne(query, function (err, user) {
             if (err) throw err;
 
             if (!user) {
                 res.end('username not found', res);
-            } else if (user.password !== req.body.params.PassWord) {
+            } else if (user.password !== req.body.password) {
                 res.end('incorrect password', res);
             } else {
                 req.session.user = user;
@@ -51,14 +51,29 @@ exports.login = function (req, res) {
     });
 };
 
-// Display list of all books.
-exports.book_list = function (req, res) {
-    res.send('hello NODE');
-};
+exports.editTeacher = function (req, res) {
+    if (sess && sess.uniquId) {
+        MongoClient.connect(url, function (err, db) {
 
-// Display detail page for a specific book.
-exports.book_detail = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book detail: ' + req.params.id);
+            if (err) throw err;
+
+            var dbo = db.db(dbName);
+            var myquery = { _id: ObjectId(req.body._id) },
+                newInfo = req.body;
+
+            delete newInfo._id;
+
+            dbo.collection("teacherprofile").updateOne(myquery, { $set: newInfo }, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.status(200).send('Successfully updated user');
+                }
+            });
+        });
+    } else {
+        res.status(400).json('Login required');
+    }
 };
 
 // Display book create form on GET.
@@ -88,27 +103,3 @@ exports.dashboard = function (req, res) {
     }
 };
 
-// Handle book create on POST.
-exports.book_create_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book create POST');
-};
-
-// Display book delete form on GET.
-exports.book_delete_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book delete GET');
-};
-
-// Handle book delete on POST.
-exports.book_delete_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book delete POST');
-};
-
-// Display book update form on GET.
-exports.book_update_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book update GET');
-};
-
-// Handle book update on POST.
-exports.book_update_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: Book update POST');
-};

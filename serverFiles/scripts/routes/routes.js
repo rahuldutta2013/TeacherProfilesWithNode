@@ -7,6 +7,7 @@ var sonarReportController = require('../controllers/sonarReport/sonarDataControl
 
 
 router.post('/login', book_controller.login);
+router.post('/editTeacher', book_controller.editTeacher);
 router.get('/dashboard', book_controller.dashboard);
 router.get('/clientInfo', commonController.clientInfo);
 router.get('/getProjects', commonController.projects);
