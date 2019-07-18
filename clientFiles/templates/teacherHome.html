@@ -10,6 +10,12 @@
         Logout
     </button>
 
+    <div>
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#add_student_modal">
+            Add Student
+        </button>
+    </div>
+
     <!--Edit Modal -->
     <div class="modal fade" id="edit_modal" role="dialog">
         <div class="modal-dialog">
@@ -56,6 +62,58 @@
                         <p>
                             <button type="button" class="btn btn-success" ng-click="EditProfile()" ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||  
                             myForm.email.$dirty && myForm.email.$invalid">Submit</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </p>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--Edit Modal -->
+    <div class="modal fade" id="add_student_modal" role="dialog" ng-controller="studentController">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <h4 class="modal-title">Add Student</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form name="myForm" novalidate>
+
+                        <p>Name:<br>
+                            <input type="text" name="name" ng-model="studentName" required>
+                            <span style="color:red" ng-show="myForm.name.$dirty && myForm.name.$invalid">
+                                <span ng-show="myForm.name.$error.required">Name is required.</span>
+                            </span>
+                        </p>
+
+                        <p>Email:<br>
+                            <input type="email" name="email" ng-model="studentEmail" required>
+                            <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+                                <span ng-show="myForm.email.$error.required">Email is required.</span>
+                                <span ng-show="myForm.email.$error.email">Invalid email address.</span>
+                            </span>
+                        </p>
+
+                        <p>Username:<br>
+                            <input type="text" name="userName" ng-model="studentUserId" required>
+                            <span style="color:red" ng-show="myForm.userName.$dirty && myForm.userName.$invalid">
+                                <span ng-show="myForm.userName.$error.required">Username is required.</span>
+                            </span>
+                        </p>
+
+                        <p>
+                            <button type="button" class="btn btn-success" ng-click="addStudent()" 
+                                ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||  
+                                myForm.email.$dirty && myForm.email.$invalid">
+                                Add Student
+                            </button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </p>
 

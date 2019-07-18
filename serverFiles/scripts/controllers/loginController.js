@@ -111,7 +111,31 @@ exports.dashboard = function (req, res) {
     }
 };
 
-exports.addTeacher = function (req, res) {
+var verifyTeacherTeacherEmail = function() {
+
+};
+
+var createStudentAccount = function(req) {
+    var password = Math.random().toString(36).substr(2, 9),
+        mailOptions = {
+        from: senderEmailAddress,
+        to: req.body.email,
+        subject: 'Your account has been created',
+        text: 'User Name: ' + req.body.userId + ' Password: ' + password
+    };
+
+    res.status(200).send('Account created successfully');
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+};
+
+exports.addPerson = function (req, res) {
     MongoClient.connect(url, function (err, db) {
 
         if (err) throw err;
@@ -137,20 +161,45 @@ exports.addTeacher = function (req, res) {
                             text: 'Verification Code: ' + req.body.verificationCode
                         };
 
+                        // email: '',
+                        // name: '',
+                        // password: '',
+                        // subject: '',
+                        // userName: '',
+
+                        if (req.body.role === 'student') {
+                            delete req.body._id;
+                        }
+                        
+
                         dbo.collection("teacherprofile").insertOne(req.body, function (err, response) {
                             if (err) throw err;
 
-                            console.log(response);
+                            if (req.body.role === 'teacher') {
+                                verifyTeacherTeacherEmail();
 
-                            res.status(200).json({ 'id': response.ops[0]._id });
+                                res.status(200).json({ 'id': response.ops[0]._id });
 
-                            transporter.sendMail(mailOptions, function (error, info) {
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    console.log('Email sent: ' + info.response);
-                                }
-                            });
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log('Email sent: ' + info.response);
+                                    }
+                                });
+                            } else if (req.body.role === 'student') {
+                                createStudentAccount(req);
+                            }
+
+                            // res.status(200).json({ 'id': response.ops[0]._id });
+
+                            // transporter.sendMail(mailOptions, function (error, info) {
+                            //     if (error) {
+                            //         console.log(error);
+                            //     } else {
+                            //         console.log('Email sent: ' + info.response);
+                            //     }
+                            // });
                         });
                     }
                 });

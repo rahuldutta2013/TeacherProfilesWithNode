@@ -26,14 +26,6 @@ app.use(session({
 var externalRoutes = require('./scripts/routes/routes');
 app.use('/externalRoutes', externalRoutes);
 
-// var sess;
-
-
-// app.get('/logout', function (req, res) {
-//   sess = {};
-//   res.status(200).send({ httpStatus: 'OK' });
-// });
-
 
 var server = app.listen(8081, function () {
   var host = server.address().address;

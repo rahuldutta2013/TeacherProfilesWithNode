@@ -28,7 +28,7 @@ teacherApp.controller('loginController', function ($scope, $state, $http, $rootS
         $scope.userNameAlreadyExist = false;
         $http({
             method: "POST",
-            url: "http://127.0.0.1:8081/externalRoutes/addTeacher",
+            url: "http://127.0.0.1:8081/externalRoutes/addPerson",
             data: $scope.teacherInfo
         }).then(function mySuccess(response) {
             if (response.statusText === 'OK') {
@@ -119,4 +119,32 @@ teacherApp.controller('twoStepController', function ($scope, $stateParams, $http
             }
         });
     };
-})
+});
+
+teacherApp.controller('studentController', function ($scope, $stateParams, $http, $state) {
+    var userId = $stateParams.userId;
+
+    $scope.addStudent = function () {
+        // $scope.invalidCode = false;
+
+        $http({
+            method: "POST",
+            url: "http://127.0.0.1:8081/externalRoutes/addPerson",
+            data: {
+                '_id': userId,
+                'name': $scope.studentName,
+                'email': $scope.studentEmail,
+                'userName': $scope.studentUserId,
+                'role': 'student'
+            }
+        }).then(function mySuccess(response) {
+            if (response.statusText === 'OK') {
+                $state.go('login');
+            }
+        }, function myError(response) {
+            if (response.status === 400) {
+                $scope.invalidCode = true;
+            }
+        });
+    };
+});
